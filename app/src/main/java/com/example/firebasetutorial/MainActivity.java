@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity
 
     private StorageReference storageRef;
     private DatabaseReference databaseRef;
+
+    private StorageTask uploadTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-               openFileChooser();
+                   openFileChooser();
             }
         });
 
@@ -76,15 +79,19 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
+                if(uploadTask != null&& uploadTask.isInProgress())
+                {
+                    Toast.makeText(MainActivity.this, "upload in progress", Toast.LENGTH_SHORT).show();
+                }else{
                 uploadFile();
-            }
+            }}
         });
         txtShowUpload.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-
+                openImagesActivity();
             }
         });
     }
@@ -121,7 +128,7 @@ public class MainActivity extends AppCompatActivity
         if( imageUri != null)
         {
            StorageReference filestorageReference =  storageRef.child("uploads/" + System.currentTimeMillis() + "." +getFileExtension(imageUri));
-            filestorageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+           uploadTask=  filestorageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
             {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
@@ -168,5 +175,10 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void openImagesActivity()
+    {
+        Intent intent = new Intent(this , ImageActivity.class);
+        startActivity(intent);
+    }
 
 }
