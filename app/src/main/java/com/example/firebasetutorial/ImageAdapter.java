@@ -17,13 +17,13 @@ import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder>
 {
-    private Context context;
-    private List<Upload> Uploads;
+    private Context mcontext;
+    private List<Upload> mUploads;
 
     public ImageAdapter(Context context, List<Upload> Uploads)
     {
-        this.context = context;
-        this.Uploads = Uploads;
+        mcontext = context;
+        mUploads = Uploads;
     }
 
 
@@ -31,35 +31,33 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     @Override
     public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View v = LayoutInflater.from(context).inflate(R.layout.activity_image,parent,false);
-
+        View v = LayoutInflater.from(mcontext).inflate(R.layout.image_item,parent,false);
         return new ImageViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position)
     {
-        Upload uploadCurrent = Uploads.get(position);
+        Upload uploadCurrent = mUploads.get(position);
         holder.txtViewName.setText(uploadCurrent.getName());
-        Picasso.with(context).load(uploadCurrent.getImageUrl()).fit().centerCrop().into(holder.imgView);
+        Picasso.with(mcontext).load(uploadCurrent.getImageUrl()).fit().centerCrop().into(holder.imgView);
     }
 
     @Override
     public int getItemCount()
     {
-        return Uploads.size();
+        return mUploads.size();
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder
     {
         public TextView txtViewName;
         public ImageView imgView;
-       public ImageViewHolder (View itemView)
-       {
+        public ImageViewHolder (View itemView)
+        {
            super(itemView);
            txtViewName = itemView.findViewById(R.id.txtViewName);
            imgView = itemView.findViewById(R.id.imgViewUpload);
-
-       }
+        }
     }
 }
