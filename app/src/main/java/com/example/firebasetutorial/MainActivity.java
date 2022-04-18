@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity
         progressBar = findViewById(R.id.progressBar);
 
         storageRef = FirebaseStorage.getInstance().getReference("uploads");
+        databaseRef = FirebaseDatabase.getInstance().getReference("uploads");
 
 
 
@@ -127,13 +129,16 @@ public class MainActivity extends AppCompatActivity
     {
         if( imageUri != null)
         {
-           StorageReference filestorageReference =  storageRef.child("uploads/" + System.currentTimeMillis() + "." +getFileExtension(imageUri));
-           uploadTask=  filestorageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+           StorageReference fileReference =  storageRef.child( System.currentTimeMillis() + "." + getFileExtension(imageUri));
+
+
+
+           uploadTask =  fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
             {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
                 {
-                    //
+
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable()
                     {
@@ -142,8 +147,11 @@ public class MainActivity extends AppCompatActivity
                             progressBar.setProgress(0);
                         }
                     }, 500);
+
                     Toast.makeText(MainActivity.this, "Upload Successful", Toast.LENGTH_SHORT).show();
-                    Upload upload = new Upload(edtTextName.getText().toString().trim() , taskSnapshot.toString());
+                    Upload upload = new Upload(edtTextName.getText().toString().trim() , taskSnapshot.getStorage().getDownloadUrl().toString());
+
+
                     String uploadId = databaseRef.push().getKey();
                     databaseRef.child(uploadId).setValue(upload);
 

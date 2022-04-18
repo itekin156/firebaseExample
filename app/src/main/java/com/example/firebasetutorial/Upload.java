@@ -3,21 +3,21 @@ package com.example.firebasetutorial;
 public class Upload
 {
     private String name;
-    private String imageviewUrl;
+    private String imageViewUrl;
 
     public Upload()
     {
 
     }
 
-    public Upload(String name , String imageviewUrl)
+    public Upload(String n , String imgViewUrl)
     {
-        if (name.trim().equals(""))
+        if (n.trim().equals(""))
         {
-            name = "No Name";
+            n = "No Name";
         }
-        this.name = name;
-       this.imageviewUrl = imageviewUrl;
+        name = n;
+       imageViewUrl = imgViewUrl;
     }
 
     public String getName()
@@ -31,11 +31,11 @@ public class Upload
 
     public String getImageUrl()
     {
-        return imageviewUrl;
+        return imageViewUrl;
     }
 
-    public void setImageviewUrl(String imageviewUrl)
+    public void setImageUrl(String imgViewUrl)
     {
-        this.imageviewUrl = imageviewUrl ;
+        imageViewUrl = imgViewUrl ;
     }
 }
