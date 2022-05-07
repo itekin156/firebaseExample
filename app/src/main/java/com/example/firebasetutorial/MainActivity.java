@@ -130,9 +130,6 @@ public class MainActivity extends AppCompatActivity
         if( imageUri != null)
         {
            StorageReference fileReference =  storageRef.child( System.currentTimeMillis() + "." + getFileExtension(imageUri));
-
-
-
            uploadTask =  fileReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
             {
                 @Override
@@ -177,8 +174,7 @@ public class MainActivity extends AppCompatActivity
 
         }else
             {
-
-            Toast.makeText(this, "no file slected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "no file selected", Toast.LENGTH_SHORT).show();
             }
 
     }
